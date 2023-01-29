@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  elasticsearch:
+    image: docker.io/elasticsearch:8.6.0
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - ELASTIC_PASSWORD=changeme
+      - discovery.type=single-node
+      - xpack.security.enrollment.enabled=true
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.io/kibana:8.6.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTIC_PASSWORD=changeme
+    depends_on:
+      - elasticsearch
+    volumes:
+      - k-config:/usr/share/kibana/config
+
+volumes:
+  k-config:
+  es-config:
+  es-data:
